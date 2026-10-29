@@ -42,7 +42,7 @@ const PATTERN_ID: Record<NonNullable<TerrainType['pattern']>, string> = {
   buildings: 'pat-buildings',
   waves: 'pat-waves',
   contour: 'pat-contour',
-  bridge: 'pat-bridge',
+  planks: 'pat-bridge',
 };
 
 function Patterns() {

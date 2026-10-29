@@ -67,13 +67,16 @@ export const COMBAT_MODIFIERS: CombatModifier[] = [
     },
   },
   {
-    // Aanvallen vanuit een rivier is lastig.
-    id: 'rivier',
+    // Aanvallen vanuit lastig terrein (bijvoorbeeld een rivier): zie attackFromShift in data/terrains.ts.
+    id: 'aanvalsterrein',
     apply: (ctx) => {
       const terrain = terrainAt(ctx.map, ctx.catalog, ctx.attacker.hex);
-      return terrain?.id === 'river'
-        ? { columnShift: -1, note: 'aanval vanuit de rivier: -1 kolom' }
-        : null;
+      const shift = terrain?.attackFromShift ?? 0;
+      if (shift === 0) return null;
+      return {
+        columnShift: shift,
+        note: `aanval vanuit ${terrain!.name.toLowerCase()}: ${shift > 0 ? '+' : ''}${shift} kolom`,
+      };
     },
   },
 ];

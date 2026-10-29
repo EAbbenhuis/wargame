@@ -10,6 +10,7 @@
 //   blocksSight       blokkeert het zicht naar wat erachter ligt
 //   elevation         hoogte: 1 = je kijkt vanaf hier over bos en stad heen
 //   visionBonus       extra zichtafstand voor een eenheid die hier staat
+//   attackFromShift   (optioneel) kolommen verschuiven bij een aanval vanuit dit terrein
 //   color / pattern   hoe de web-app het tekent
 
 import type { TerrainType } from '../types.ts';
@@ -65,6 +66,7 @@ export const TERRAINS: TerrainType[] = [
     blocksSight: false,
     elevation: 0,
     visionBonus: 0,
+    attackFromShift: -1,
     pattern: 'waves',
   },
   {
@@ -91,6 +93,6 @@ export const TERRAINS: TerrainType[] = [
     blocksSight: false,
     elevation: 0,
     visionBonus: 0,
-    pattern: 'bridge',
+    pattern: 'planks',
   },
 ];

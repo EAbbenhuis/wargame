@@ -26,7 +26,7 @@ export type IconShape =
   | { kind: 'text'; x: number; y: number; text: string; size?: number };
 
 export interface UnitType {
-  /** Unieke sleutel, bijvoorbeeld 'infantry'. Wordt in scenario's gebruikt. */
+  /** Unieke sleutel, bijvoorbeeld infantry. Wordt in scenario's gebruikt. */
   id: string;
   /** Naam in het spel, in het Nederlands. */
   name: string;
@@ -74,8 +74,10 @@ export interface TerrainType {
   elevation: number;
   /** Extra zichtafstand voor een eenheid die hier staat (bijvoorbeeld op een heuvel). */
   visionBonus: number;
+  /** Kolomverschuiving als een eenheid VANUIT dit terrein aanvalt (bijvoorbeeld -1 vanuit een rivier). */
+  attackFromShift?: number;
   /** Optioneel patroon dat de web-app over de kleur tekent. */
-  pattern?: 'trees' | 'buildings' | 'waves' | 'contour' | 'bridge';
+  pattern?: 'trees' | 'buildings' | 'waves' | 'contour' | 'planks';
 }
 
 export interface ScenarioUnit {
