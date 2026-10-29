@@ -10,8 +10,7 @@
 //   safety      uit de buurt blijven van vijandelijke dreiging
 //   terrain     in goed verdedigbaar terrein gaan staan (bos, stad, heuvel)
 //   advance     naar de vijand toe trekken
-//   defendWhenThreatened  kans (0-1) dat een bedreigde eenheid ingraaft in plaats van beweegt;
-//                         werkt als drempel, niet als dobbelsteen: de AI is deterministisch
+//   hold        blijven staan en ingraven op een doel dat je al bezit
 
 export interface Posture {
   id: string;
@@ -23,7 +22,7 @@ export interface Posture {
   safety: number;
   terrain: number;
   advance: number;
-  defendWhenThreatened: number;
+  hold: number;
 }
 
 export const POSTURES: Posture[] = [
@@ -37,7 +36,7 @@ export const POSTURES: Posture[] = [
     safety: 3,
     terrain: 2,
     advance: 1,
-    defendWhenThreatened: 0.5,
+    hold: 6,
   },
   {
     id: 'aggressive',
@@ -49,7 +48,7 @@ export const POSTURES: Posture[] = [
     safety: 1,
     terrain: 1,
     advance: 4,
-    defendWhenThreatened: 0.2,
+    hold: 2,
   },
   {
     id: 'defensive',
@@ -61,6 +60,6 @@ export const POSTURES: Posture[] = [
     safety: 5,
     terrain: 4,
     advance: 0,
-    defendWhenThreatened: 0.9,
+    hold: 12,
   },
 ];

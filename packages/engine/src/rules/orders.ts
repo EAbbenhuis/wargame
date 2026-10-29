@@ -11,7 +11,7 @@ import { hexDistance, hexKey, hexNeighbors } from '../hex/hex.ts';
 import type { Hex, Order, OrderIntent } from '../types.ts';
 import type { PlayerView } from '../view.ts';
 import { terrainAt, unitTypeOf } from './map.ts';
-import { findPath, isNextToKnownEnemy, moveCost, reachableHexes } from './movement.ts';
+import { findPath, isNextToKnownEnemy, moveCost, reachablePaths } from './movement.ts';
 
 function describeHex(hex: Hex): string {
   const col = hex.q + (hex.r - (hex.r & 1)) / 2;
@@ -127,18 +127,19 @@ export function intentToOrder(view: PlayerView, intent: OrderIntent): IntentResu
       if (hexDistance(unit.hex, target.hex) === 1) {
         return checked({ kind: 'attack', path: [], targetId: target.id });
       }
-      const reach = reachableHexes(view, unit.id);
+      const reach = reachablePaths(view, unit.id);
       const options = hexNeighbors(target.hex)
         .map((hex) => reach.get(hexKey(hex)))
         .filter((info) => info !== undefined)
         .sort((a, b) => a.cost - b.cost || (hexKey(a.hex) < hexKey(b.hex) ? -1 : 1));
       const best = options[0];
-      if (!best)
+      if (!best) {
         return {
           ok: false,
           error: `Buiten bereik: ${unit.name} kan deze beurt niet naast het doelwit komen.`,
         };
-      const path = findPath(view, unit.id, best.hex)!;
+      }
+      const path = best.path;
       return checked({ kind: 'attack', path, targetId: target.id });
     }
   }

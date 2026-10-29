@@ -149,27 +149,43 @@ function fail(state: GameState, error: string): ActionResult {
   return { ok: false, error, state };
 }
 
+/**
+ * Kopie om in te werken. Kaart en catalogus veranderen nooit tijdens een spel en worden
+ * gedeeld; de geschiedenis krijgt alleen nieuwe beurten erbij. Dat scheelt veel kopieerwerk.
+ */
+function workingCopy(state: GameState): GameState {
+  const { catalog, map, history, ...rest } = state;
+  return { ...structuredClone(rest), catalog, map, history: [...history] };
+}
+
+function withOrders(state: GameState, side: Side, orders: GameState['orders'][Side]): GameState {
+  return { ...state, orders: { ...state.orders, [side]: orders } };
+}
+
 /** Pas één actie toe. De oude toestand blijft ongewijzigd. */
 export function applyAction(state: GameState, action: GameAction): ActionResult {
   if (state.phase === 'ended') return fail(state, 'Het spel is afgelopen.');
-  const next = structuredClone(state);
 
   switch (action.type) {
     case 'setOrder': {
-      if (next.ready[action.side])
+      if (state.ready[action.side])
         return fail(state, 'Deze kant is al klaar met plannen voor deze beurt.');
-      const error = validateOrder(getPlayerView(next, action.side), action.unitId, action.order);
+      const error = validateOrder(getPlayerView(state, action.side), action.unitId, action.order);
       if (error) return fail(state, error);
-      next.orders[action.side][action.unitId] = action.order;
-      return { ok: true, state: next };
+      const orders = {
+        ...state.orders[action.side],
+        [action.unitId]: structuredClone(action.order),
+      };
+      return { ok: true, state: withOrders(state, action.side, orders) };
     }
     case 'clearOrder': {
-      if (next.ready[action.side])
+      if (state.ready[action.side])
         return fail(state, 'Deze kant is al klaar met plannen voor deze beurt.');
-      delete next.orders[action.side][action.unitId];
-      return { ok: true, state: next };
+      const { [action.unitId]: _removed, ...orders } = state.orders[action.side];
+      return { ok: true, state: withOrders(state, action.side, orders) };
     }
     case 'setPosture': {
+      const next = workingCopy(state);
       if (!POSTURES.some((p) => p.id === action.posture)) {
         return fail(state, `Onbekende houding '${action.posture}'. Zie data/postures.ts.`);
       }
@@ -180,12 +196,20 @@ export function applyAction(state: GameState, action: GameAction): ActionResult 
       return { ok: true, state: next };
     }
     case 'endTurn': {
+      const next = workingCopy(state);
       next.ready[action.side] = true;
       // Computerspelers plannen pas nu, met alleen hun eigen zicht (geen valsspelen).
       for (const side of ['blue', 'red'] as const) {
         const controller = next.controllers[side];
         if (controller.kind === 'ai' && !next.ready[side]) {
-          next.orders[side] = planOrders(getPlayerView(next, side), controller.posture);
+          const view = getPlayerView(next, side);
+          const planned = planOrders(view, controller.posture);
+          // Ook de computer gaat door de validatie: een ongeldige order valt gewoon weg.
+          next.orders[side] = Object.fromEntries(
+            Object.entries(planned).filter(
+              ([unitId, order]) => validateOrder(view, unitId, order) === null,
+            ),
+          );
           next.ready[side] = true;
         }
       }

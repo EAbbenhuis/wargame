@@ -60,7 +60,7 @@ export const TERRAINS: TerrainType[] = [
     color: '#a9c8de',
     // Te voet kost oversteken een hele beurt; voertuigen kunnen er niet door.
     moveCost: { default: 3, tracked: null, wheeled: null },
-    defenseMultiplier: 0.5,
+    defenseMultiplier: 0.7,
     cover: 0,
     blocksSight: false,
     elevation: 0,

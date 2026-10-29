@@ -70,21 +70,29 @@ export function getPlayerView(
   const own = all.filter((u) => u.side === side);
   const enemies = all
     .filter((u) => u.side !== side && (revealed || visible.has(hexKey(u.hex))))
-    .map((u) => ({ id: u.id, type: u.type, name: u.name, hex: u.hex, strength: u.strength }));
+    .map((u) => ({
+      id: u.id,
+      type: u.type,
+      name: u.name,
+      hex: { ...u.hex },
+      strength: u.strength,
+    }));
   const enemyIds = new Set(enemies.map((e) => e.id));
   const lastSeen = Object.values(state.lastSeen[side])
     .filter((s) => !enemyIds.has(s.unitId))
+    .map((s) => ({ ...s }))
     .sort((a, b) => (a.unitId < b.unitId ? -1 : 1));
 
   const lastRecord = state.history.at(-1);
   const lastTurnEvents = lastRecord
     ? lastRecord.events.flatMap((e) => {
-        const seen = observe(e, side, visible, revealed);
+        const seen = observe(structuredClone(e), side, visible, revealed);
         return seen ? [seen] : [];
       })
     : [];
 
-  return structuredClone({
+  // Kaart en catalogus worden gedeeld (die veranderen nooit); de rest is een eigen kopie.
+  return {
     side,
     opponent: opponentOf(side),
     scenarioName: state.scenarioName,
@@ -94,12 +102,12 @@ export function getPlayerView(
     phase: state.phase,
     catalog: state.catalog,
     map: state.map,
-    objectives: state.objectives,
-    ownUnits: own,
+    objectives: structuredClone(state.objectives),
+    ownUnits: structuredClone(own),
     enemies,
     lastSeen,
     visible: revealed ? allHexKeys(state.map) : [...visible].sort(),
-    orders: state.orders[side],
+    orders: structuredClone(state.orders[side]),
     ready: state.ready[side],
     lastTurnEvents,
     strength: {
@@ -107,9 +115,9 @@ export function getPlayerView(
       ownStart: state.startStrength[side],
       enemyStart: state.startStrength[opponentOf(side)],
     },
-    outcome: state.outcome,
+    outcome: structuredClone(state.outcome),
     revealed,
-  });
+  };
 }
 
 function allHexKeys(map: GameMap): HexKey[] {

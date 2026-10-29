@@ -58,42 +58,58 @@ function explore(
     view.ownUnits.filter((u) => u.id !== unitId).map((u) => hexKey(u.hex)),
   );
 
+  // Hexen naast een bekende vijand: daar stopt de beweging (contact).
+  const contactHexes = new Set(view.enemies.flatMap((e) => hexNeighbors(e.hex).map(hexKey)));
+
   const startKey = hexKey(unit.hex);
   best.set(startKey, { hex: unit.hex, cost: 0, previous: null });
-  // Eenvoudige Dijkstra. Bij gelijke kosten beslist de sleutel: zo is de uitkomst altijd hetzelfde.
-  const open: HexKey[] = [startKey];
+  // Dijkstra met een emmer per kostenniveau (kosten zijn kleine gehele getallen).
+  // Binnen een emmer gaan we op volgorde van sleutel: zo is de uitkomst altijd hetzelfde.
+  const buckets: HexKey[][] = Array.from({ length: type.movement + 1 }, () => []);
+  buckets[0]!.push(startKey);
   const done = new Set<HexKey>();
-  while (open.length > 0) {
-    open.sort((a, b) => best.get(a)!.cost - best.get(b)!.cost || (a < b ? -1 : 1));
-    const key = open.shift()!;
-    if (done.has(key)) continue;
-    done.add(key);
-    const current = best.get(key)!;
-    // Contact: naast een vijand stopt de beweging (behalve op de starthex).
-    if (key !== startKey && isNextToKnownEnemy(view, current.hex)) continue;
-    for (const next of hexNeighbors(current.hex)) {
-      const nextKey = hexKey(next);
-      if (done.has(nextKey) || enemyHexes.has(nextKey)) continue;
-      const step = moveCost(view.map, view.catalog, type, next);
-      if (step === null) continue;
-      const cost = current.cost + step;
-      if (cost > type.movement) continue;
-      const known = best.get(nextKey);
-      if (!known || cost < known.cost || (cost === known.cost && key < (known.previous ?? ''))) {
-        best.set(nextKey, { hex: next, cost, previous: key });
-        open.push(nextKey);
+  for (let level = 0; level <= type.movement; level++) {
+    const bucket = buckets[level]!.sort();
+    for (const key of bucket) {
+      const current = best.get(key)!;
+      if (done.has(key) || current.cost !== level) continue;
+      done.add(key);
+      if (key !== startKey && contactHexes.has(key)) continue;
+      for (const next of hexNeighbors(current.hex)) {
+        const nextKey = hexKey(next);
+        if (done.has(nextKey) || enemyHexes.has(nextKey)) continue;
+        const step = moveCost(view.map, view.catalog, type, next);
+        if (step === null) continue;
+        const cost = current.cost + step;
+        if (cost > type.movement) continue;
+        const known = best.get(nextKey);
+        if (!known || cost < known.cost) {
+          best.set(nextKey, { hex: next, cost, previous: key });
+          buckets[cost]!.push(nextKey);
+        }
       }
     }
   }
   return { best, endable: (key) => key !== startKey && best.has(key) && !friendlyHexes.has(key) };
 }
 
-/** Goedkoopste pad (zonder starthex) naar een bereikbare hex, of null. */
-export function findPath(view: PlayerView, unitId: string, to: Hex): Hex[] | null {
+/** Alle bereikbare hexen met het goedkoopste pad erheen, in één zoektocht (snel, voor de AI). */
+export function reachablePaths(
+  view: PlayerView,
+  unitId: string,
+): Map<HexKey, ReachInfo & { path: Hex[] }> {
   const { best, endable } = explore(view, unitId);
-  let key: HexKey | null = hexKey(to);
-  if (!endable(key)) return null;
+  const result = new Map<HexKey, ReachInfo & { path: Hex[] }>();
+  for (const [key, info] of best) {
+    if (!endable(key)) continue;
+    result.set(key, { ...info, path: buildPath(best, key) });
+  }
+  return result;
+}
+
+function buildPath(best: Map<HexKey, ReachInfo>, target: HexKey): Hex[] {
   const path: Hex[] = [];
+  let key: HexKey | null = target;
   while (key) {
     const info: ReachInfo = best.get(key)!;
     if (info.previous === null) break; // starthex hoort niet in het pad
@@ -101,4 +117,11 @@ export function findPath(view: PlayerView, unitId: string, to: Hex): Hex[] | nul
     key = info.previous;
   }
   return path;
+}
+
+/** Goedkoopste pad (zonder starthex) naar een bereikbare hex, of null. */
+export function findPath(view: PlayerView, unitId: string, to: Hex): Hex[] | null {
+  const { best, endable } = explore(view, unitId);
+  const key = hexKey(to);
+  return endable(key) ? buildPath(best, key) : null;
 }
