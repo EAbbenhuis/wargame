@@ -22,7 +22,7 @@ Je kent alleen wat de commandant ziet. Verzin geen vijandelijke eenheden.
 
 Spelregels in het kort:
 - Coördinaten zijn [kolom, rij]. Oneven rijen schuiven een halve hex naar rechts.
-- Elke eenheid heeft bewegingspunten; terrein kost punten. Pantser en wielvoertuigen kunnen niet door een rivier, alleen over een brug.
+- Elke eenheid heeft bewegingspunten; terrein kost punten (zie 'Terrein' in de situatie). Sommig terrein is voor sommige eenheden onbegaanbaar.
 - Wie naast een vijand komt, stopt. Aanvallen kan alleen op een zichtbare vijand, vanaf een buurhex.
 - Artillerie vuurt op een zichtbare hex binnen bereik, vóór alle beweging.
 - Een doel is van wie er aan het eind van de beurt op staat.
@@ -55,6 +55,24 @@ export function summarizeForModel(view: PlayerView): string {
       line += bySymbol.get(view.map.terrain[row * view.map.cols + col]!) ?? '?';
     rows.push(`${String(row).padStart(2, ' ')} ${line}`);
   }
+  // Terreinregels uit de data, zodat een nieuw terrein vanzelf in de uitleg komt.
+  const classes = [
+    ...new Set(Object.values(view.catalog.unitTypes).map((t) => t.movementClass)),
+  ].sort();
+  const classNames = (cls: string) =>
+    Object.values(view.catalog.unitTypes)
+      .filter((t) => t.movementClass === cls)
+      .map((t) => t.name.toLowerCase())
+      .join('/');
+  const terrainRules = Object.values(view.catalog.terrains).map((t) => {
+    const costs = classes
+      .map((cls) => {
+        const cost = t.moveCost[cls] === undefined ? t.moveCost.default : t.moveCost[cls];
+        return `${classNames(cls)} ${cost === null ? 'onbegaanbaar' : cost}`;
+      })
+      .join(', ');
+    return `${t.name}: ${costs}; verdediging x${t.defenseMultiplier}${t.blocksSight ? '; blokkeert zicht' : ''}`;
+  });
   const own = view.ownUnits.map((u) => {
     const t = unitTypeOf(view.catalog, u);
     return {
@@ -89,6 +107,7 @@ export function summarizeForModel(view: PlayerView): string {
     `Beurt ${view.turn} van ${view.maxTurns}. Opdracht: ${view.briefing}`,
     `Kaart (${legend}), kolommen 0-${view.map.cols - 1} van links naar rechts:`,
     ...rows,
+    `Terrein (bewegingskosten per soort eenheid): ${terrainRules.join(' | ')}`,
     `Doelen: ${JSON.stringify(objectives)}`,
     `Eigen eenheden: ${JSON.stringify(own)}`,
     `Zichtbare vijanden: ${JSON.stringify(enemies)}`,

@@ -14,6 +14,7 @@ Deze gids is voor mensen die niet programmeren. U typt (of plakt) een opdracht i
 - Vraag aan het eind: _"Draai de tests en vertel me in gewone taal wat je hebt veranderd."_
 - Niet goed? Zeg _"Draai dat terug"_. Alles staat in git.
 - Snel testen zonder te spelen: knop **debug** rechtsboven (spring naar een beurt, fog of war uit).
+- Wilt u iets op een bepaalde plek? Ga met de muis over een hex: de tooltip toont het terrein en (kolom,rij). Noem die in uw opdracht.
 
 De opdrachten lopen op van makkelijk naar moeilijk. De tijden zijn een schatting voor iemand die het voor het eerst doet, inclusief kijken in het spel.
 
@@ -54,7 +55,7 @@ verdediging x0,8, en het blokkeert het zicht niet. Geef het een eigen kleur. Leg
 een paar hexen aan ten zuiden van Merelbos in Operatie Grensbrug.
 ```
 
-Waarschijnlijk geraakt: `packages/engine/src/data/terrains.ts`, `packages/engine/src/data/scenarios/grensbrug.ts`, misschien `packages/web/src/map/HexMap.tsx` (patroon).
+Waarschijnlijk geraakt: `packages/engine/src/data/terrains.ts`, `packages/engine/src/data/scenarios/grensbrug.ts`; voor een eigen patroon ook `packages/engine/src/types.ts` en `packages/web/src/map/HexMap.tsx`; een test in `rules/movement.test.ts`.
 Controle: het moeras staat op de kaart; pantser kan er niet in (geen geel bereik).
 
 ### 5. Nieuwe AI-houding (± 5 minuten)

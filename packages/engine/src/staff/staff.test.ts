@@ -146,3 +146,11 @@ describe('berichten voor het taalmodel', () => {
     expect(parsed.warnings).toHaveLength(2);
   });
 });
+
+describe('terreinregels voor het taalmodel', () => {
+  it('komen uit de data, inclusief onbegaanbaar terrein', () => {
+    const summary = summarizeForModel(start());
+    expect(summary).toMatch(/Rivier: [^|]*pantser[^|]*onbegaanbaar/);
+    expect(summary).toContain('Brug:');
+  });
+});
