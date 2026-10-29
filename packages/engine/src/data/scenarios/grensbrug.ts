@@ -15,7 +15,7 @@ export const GRENSBRUG: Scenario = {
   id: 'grensbrug',
   name: 'Operatie Grensbrug',
   briefing:
-    'Roodland heeft de oostoever van de Vaal bezet. Uw brigade moet binnen 12 beurten twee van de drie ' +
+    'Roodland heeft de oostoever van de Grensstroom bezet. Uw brigade moet binnen 12 beurten twee van de drie ' +
     'sleutellocaties in handen hebben: de Grensbrug, het dorp Kruisweide en de Uitkijkheuvel. ' +
     'Pantser kan alleen over een brug de rivier over; infanterie kan waden, maar dat kost een hele beurt. ' +
     'Beide partijen geven tegelijk hun bevelen. Denk dus na over wat de tegenstander gaat doen.',
