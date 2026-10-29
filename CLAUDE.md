@@ -59,7 +59,7 @@ data/ (eenheden, terrein, scenario's)  ──►  engine: applyAction ──► 
 | Alle tests                             | `npm test`                                                        | 3 s             |
 | Tests continu tijdens werken           | `npm run test:watch` (of `npx vitest packages/engine`)            | direct          |
 | Eén testbestand                        | `npx vitest run packages/engine/src/rules/combat.test.ts`         | 1 s             |
-| Typecontrole / lint                    | `npm run typecheck` / `npm run lint`                              | 5 s / 4 s       |
+| Typecontrole / lint                    | `npm run typecheck` / `npm run lint`                              | 8 s / 7 s       |
 | Gebouwde site (statisch)               | `npm run build` (uitvoer in `packages/web/dist`)                  | 1 s             |
 | End-to-end (speelt een heel spel)      | `npm run test:e2e`                                                | 12 s            |
 | Balans meten (computer tegen computer) | `npx tsx packages/engine/scripts/balance.ts 40 balanced balanced` | 6 s             |
