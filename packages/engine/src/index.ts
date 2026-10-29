@@ -21,4 +21,20 @@ export { terrainAt, unitTypeOf } from './rules/map.ts';
 export { computeScore } from './rules/victory.ts';
 export { planOrders, findPosture } from './ai/opponent.ts';
 export { autoPlayTurn, autoPlayUntil } from './ai/autoplay.ts';
-export { defaultCatalog, POSTURES, SCENARIOS, TERRAINS, UNIT_TYPES, type Posture } from './data/index.ts';
+export {
+  defaultCatalog,
+  POSTURES,
+  SCENARIOS,
+  TERRAINS,
+  UNIT_TYPES,
+  type Posture,
+} from './data/index.ts';
+export {
+  describeEvent,
+  describeHex,
+  namesFromState,
+  namesFromView,
+  SIDE_NAMES,
+  type NameLookup,
+} from './text/describe.ts';
+export * from './staff/index.ts';

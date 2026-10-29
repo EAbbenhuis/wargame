@@ -53,6 +53,8 @@ export interface PlayerView {
   outcome: Outcome | null;
   /** True als de fog of war uit staat (debugmenu). */
   revealed: boolean;
+  /** Namen van eenheden die deze kant kent (eigen, gezien, of vernietigd). Geen posities. */
+  unitNames: Record<string, string>;
 }
 
 export function opponentOf(side: Side): Side {
@@ -117,7 +119,22 @@ export function getPlayerView(
     },
     outcome: structuredClone(state.outcome),
     revealed,
+    unitNames: knownNames(state, side, enemies, lastSeen),
   };
+}
+
+function knownNames(
+  state: GameState,
+  side: Side,
+  enemies: KnownEnemy[],
+  lastSeen: LastSeen[],
+): Record<string, string> {
+  const names: Record<string, string> = {};
+  for (const u of Object.values(state.units)) if (u.side === side) names[u.id] = u.name;
+  for (const u of Object.values(state.destroyed)) names[u.id] = u.name;
+  for (const e of enemies) names[e.id] = e.name;
+  for (const s of lastSeen) names[s.unitId] = state.units[s.unitId]?.name ?? s.unitId;
+  return names;
 }
 
 function allHexKeys(map: GameMap): HexKey[] {
