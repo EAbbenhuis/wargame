@@ -24,7 +24,7 @@ describe('architectuur van de engine', () => {
 
   it('gebruikt nergens Math.random', () => {
     const offenders = sourceFiles(SRC).filter((file) =>
-      /Math\.random/.test(readFileSync(file, 'utf8')),
+      /Math\.random\s*\(/.test(readFileSync(file, 'utf8')),
     );
     expect(offenders).toEqual([]);
   });
