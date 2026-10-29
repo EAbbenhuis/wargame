@@ -29,6 +29,15 @@ describe('zicht en fog of war', () => {
     expect(visible.has(hexKey(at(4, 2)))).toBe(false);
   });
 
+  it('kijkt over een moeras heen', () => {
+    const map = openMap();
+    map[2] = '...M......';
+    const state = testGame({ map, units: [unit('b1', 'blue', 'infantry', 1, 2)] });
+    const visible = visibleHexes(state, 'blue');
+    expect(visible.has(hexKey(at(3, 2)))).toBe(true);
+    expect(visible.has(hexKey(at(4, 2)))).toBe(true);
+  });
+
   it('kijkt vanaf een heuvel over bos heen, en verder', () => {
     const map = openMap(12, 8);
     map[2] = '.H.B........';

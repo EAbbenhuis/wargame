@@ -77,7 +77,7 @@ export interface TerrainType {
   /** Kolomverschuiving als een eenheid VANUIT dit terrein aanvalt (bijvoorbeeld -1 vanuit een rivier). */
   attackFromShift?: number;
   /** Optioneel patroon dat de web-app over de kleur tekent. */
-  pattern?: 'trees' | 'buildings' | 'waves' | 'contour' | 'planks';
+  pattern?: 'trees' | 'buildings' | 'waves' | 'contour' | 'planks' | 'reeds';
 }
 
 export interface ScenarioUnit {

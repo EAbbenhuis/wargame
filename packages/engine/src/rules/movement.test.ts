@@ -42,6 +42,24 @@ describe('beweging met terreinkosten', () => {
     expect(r.has(hexKey(at(4, 1)))).toBe(false);
   });
 
+  it('laat infanterie een moeras in voor 3 punten, maar voertuigen niet', () => {
+    // M = moeras (zie data/terrains.ts).
+    const map = ['...M......', '...M......', '...M......'];
+    const state = testGame({
+      map,
+      units: [
+        unit('b-inf', 'blue', 'infantry', 2, 0),
+        unit('b-arm', 'blue', 'armor', 2, 1),
+        unit('b-rec', 'blue', 'recon', 2, 2),
+      ],
+    });
+    const inf = reach(state, 'b-inf');
+    expect(inf.get(hexKey(at(3, 0)))?.cost).toBe(3);
+    expect(inf.has(hexKey(at(4, 0)))).toBe(false);
+    expect(reach(state, 'b-arm').has(hexKey(at(3, 1)))).toBe(false);
+    expect(reach(state, 'b-rec').has(hexKey(at(3, 2)))).toBe(false);
+  });
+
   it('kan niet door een bekende vijand heen, en stopt naast een vijand (contact)', () => {
     // Verkenning (b-rec) zorgt dat blauw de vijand ziet.
     const state = testGame({

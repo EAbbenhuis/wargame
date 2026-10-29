@@ -43,6 +43,7 @@ const PATTERN_ID: Record<NonNullable<TerrainType['pattern']>, string> = {
   waves: 'pat-waves',
   contour: 'pat-contour',
   planks: 'pat-bridge',
+  reeds: 'pat-reeds',
 };
 
 function Patterns() {
@@ -64,6 +65,10 @@ function Patterns() {
       </pattern>
       <pattern id="pat-bridge" width="6" height="6" patternUnits="userSpaceOnUse">
         <line x1="0" y1="0" x2="0" y2="6" stroke="#6b5435" strokeWidth="1.4" />
+      </pattern>
+      <pattern id="pat-reeds" width="12" height="10" patternUnits="userSpaceOnUse">
+        <path d="M3 8 V3 M5 8 V4 M9 9 V5" stroke="#5f7f6a" strokeWidth="0.9" />
+        <line x1="1" y1="9" x2="11" y2="9" stroke="#7d9fb0" strokeWidth="0.8" />
       </pattern>
       <marker
         id="arrow-move"

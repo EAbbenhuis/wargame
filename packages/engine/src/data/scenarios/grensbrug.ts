@@ -4,7 +4,7 @@
 // en voeg het toe aan de lijst in ./index.ts.
 //
 // De kaart is tekst: één regel per rij (van boven naar beneden), één teken per hex.
-// De tekens staan in ../terrains.ts:  . open   B bos   S stad   ~ rivier   H heuvel   = brug
+// De tekens staan in ../terrains.ts:  . open   B bos   S stad   ~ rivier   H heuvel   = brug   M moeras
 // Kolommen en rijen tellen vanaf 0 (linksboven). Oneven rijen schuiven een halve hex op.
 //
 // Alles is fictief: land, plaatsen en eenheden.
@@ -33,8 +33,8 @@ export const GRENSBRUG: Scenario = {
     '..........=.B...H...',
     '.....BB...~BB..HH...',
     '.....BBB..~....HH...',
-    '.BB........~.BB...BB',
-    '...........~..B.....',
+    '.BB..MMMM..~.BB...BB',
+    '.....MMM...~..B.....',
   ],
   placeNames: [
     { name: 'Brakhoven', col: 3, row: 8 },

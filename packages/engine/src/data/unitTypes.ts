@@ -45,7 +45,7 @@ export const UNIT_TYPES: UnitType[] = [
     name: 'Pantser',
     short: 'PA',
     description:
-      'Snel en sterk in de aanval op open terrein. Kan niet door een rivier, alleen over een brug.',
+      'Snel en sterk in de aanval op open terrein. Kan niet door een moeras, en niet door een rivier (alleen over een brug).',
     movement: 5,
     movementClass: 'tracked',
     attack: 7,

@@ -22,7 +22,7 @@ Je kent alleen wat de commandant ziet. Verzin geen vijandelijke eenheden.
 
 Spelregels in het kort:
 - Coördinaten zijn [kolom, rij]. Oneven rijen schuiven een halve hex naar rechts.
-- Elke eenheid heeft bewegingspunten; terrein kost punten. Pantser en wielvoertuigen kunnen niet door een rivier, alleen over een brug.
+- Elke eenheid heeft bewegingspunten; terrein kost punten. Pantser en wielvoertuigen kunnen niet door een moeras, en niet door een rivier (alleen over een brug).
 - Wie naast een vijand komt, stopt. Aanvallen kan alleen op een zichtbare vijand, vanaf een buurhex.
 - Artillerie vuurt op een zichtbare hex binnen bereik, vóór alle beweging.
 - Een doel is van wie er aan het eind van de beurt op staat.

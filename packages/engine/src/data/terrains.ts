@@ -70,6 +70,20 @@ export const TERRAINS: TerrainType[] = [
     pattern: 'waves',
   },
   {
+    id: 'marsh',
+    name: 'Moeras',
+    symbol: 'M',
+    color: '#9fb8a8',
+    // Te voet kost het een hele beurt; voertuigen zakken weg. Zicht blijft vrij.
+    moveCost: { default: 3, tracked: null, wheeled: null },
+    defenseMultiplier: 0.8,
+    cover: 0,
+    blocksSight: false,
+    elevation: 0,
+    visionBonus: 0,
+    pattern: 'reeds',
+  },
+  {
     id: 'hill',
     name: 'Heuvel',
     symbol: 'H',
