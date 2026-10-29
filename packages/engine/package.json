@@ -1,0 +1,14 @@
+{
+  "name": "@wargame/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Spelregels als pure TypeScript: (toestand, actie) => nieuwe toestand.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p ."
+  }
+}
