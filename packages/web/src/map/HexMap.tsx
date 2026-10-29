@@ -32,7 +32,8 @@ interface Props {
 
 function allHexes(cols: number, rows: number): Hex[] {
   const hexes: Hex[] = [];
-  for (let row = 0; row < rows; row++) for (let col = 0; col < cols; col++) hexes.push(offsetToAxial({ col, row }));
+  for (let row = 0; row < rows; row++)
+    for (let col = 0; col < cols; col++) hexes.push(offsetToAxial({ col, row }));
   return hexes;
 }
 
@@ -64,13 +65,37 @@ function Patterns() {
       <pattern id="pat-bridge" width="6" height="6" patternUnits="userSpaceOnUse">
         <line x1="0" y1="0" x2="0" y2="6" stroke="#6b5435" strokeWidth="1.4" />
       </pattern>
-      <marker id="arrow-move" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <marker
+        id="arrow-move"
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="5"
+        markerHeight="5"
+        orient="auto"
+      >
         <path d="M0,0 L10,5 L0,10 z" fill="#1d3f6e" />
       </marker>
-      <marker id="arrow-attack" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <marker
+        id="arrow-attack"
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto"
+      >
         <path d="M0,0 L10,5 L0,10 z" fill="#b3261e" />
       </marker>
-      <marker id="arrow-staff" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <marker
+        id="arrow-staff"
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="5"
+        markerHeight="5"
+        orient="auto"
+      >
         <path d="M0,0 L10,5 L0,10 z" fill="#6a3d9a" />
       </marker>
     </defs>
@@ -88,8 +113,16 @@ const Terrain = memo(function Terrain({ view }: { view: PlayerView }) {
         return (
           <g key={hexKey(hex)}>
             <polygon points={points} fill={terrain.color} />
-            {terrain.pattern && <polygon points={points} fill={`url(#${PATTERN_ID[terrain.pattern]})`} />}
-            <polygon points={points} fill="none" stroke="#8b8270" strokeOpacity={0.35} strokeWidth={0.8} />
+            {terrain.pattern && (
+              <polygon points={points} fill={`url(#${PATTERN_ID[terrain.pattern]})`} />
+            )}
+            <polygon
+              points={points}
+              fill="none"
+              stroke="#8b8270"
+              strokeOpacity={0.35}
+              strokeWidth={0.8}
+            />
           </g>
         );
       })}
@@ -106,10 +139,12 @@ const Terrain = memo(function Terrain({ view }: { view: PlayerView }) {
 });
 
 function pathPoints(start: Hex, path: Hex[]): string {
-  return [start, ...path].map((h) => {
-    const { x, y } = hexToPixel(h);
-    return `${x},${y}`;
-  }).join(' ');
+  return [start, ...path]
+    .map((h) => {
+      const { x, y } = hexToPixel(h);
+      return `${x},${y}`;
+    })
+    .join(' ');
 }
 
 function OrderArrow({ start, order, staff }: { start: Hex; order: Order; staff?: boolean }) {
@@ -118,7 +153,15 @@ function OrderArrow({ start, order, staff }: { start: Hex; order: Order; staff?:
   const dash = staff ? '5 4' : undefined;
   if (order.kind === 'defend') {
     const { x, y } = hexToPixel(start);
-    return <path d={`M${x - 14},${y + 16} Q${x},${y + 24} ${x + 14},${y + 16}`} fill="none" stroke={color} strokeWidth={2.2} strokeDasharray={dash} />;
+    return (
+      <path
+        d={`M${x - 14},${y + 16} Q${x},${y + 24} ${x + 14},${y + 16}`}
+        fill="none"
+        stroke={color}
+        strokeWidth={2.2}
+        strokeDasharray={dash}
+      />
+    );
   }
   if (order.kind === 'fire') {
     const a = hexToPixel(start);
@@ -126,7 +169,12 @@ function OrderArrow({ start, order, staff }: { start: Hex; order: Order; staff?:
     const mx = (a.x + b.x) / 2;
     const my = (a.y + b.y) / 2 - 30;
     return (
-      <g stroke={staff ? color : '#b3261e'} fill="none" strokeWidth={1.8} strokeDasharray={staff ? dash : '4 3'}>
+      <g
+        stroke={staff ? color : '#b3261e'}
+        fill="none"
+        strokeWidth={1.8}
+        strokeDasharray={staff ? dash : '4 3'}
+      >
         <path d={`M${a.x},${a.y} Q${mx},${my} ${b.x},${b.y}`} />
         <circle cx={b.x} cy={b.y} r={12} />
         <line x1={b.x - 16} y1={b.y} x2={b.x + 16} y2={b.y} />
@@ -178,22 +226,40 @@ export function HexMap({ view, selectedUnitId, proposals, onHexClick }: Props) {
         {hexes
           .filter((h) => !visible.has(hexKey(h)))
           .map((h) => (
-            <polygon key={hexKey(h)} points={hexCorners(h)} fill="#5b5a55" opacity={0.38} />
+            <polygon key={hexKey(h)} points={hexCorners(h)} fill="#5b5a55" opacity={0.32} />
           ))}
       </g>
 
       {/* Bereik van de geselecteerde eenheid. */}
       <g pointerEvents="none">
         {[...reach.values()].map((info) => (
-          <polygon key={hexKey(info.hex)} points={hexCorners(info.hex, 27)} fill="#fff3b0" opacity={0.55} stroke="#c9a227" strokeWidth={1} />
+          <polygon
+            key={hexKey(info.hex)}
+            points={hexCorners(info.hex, 27)}
+            fill="#fff3b0"
+            opacity={0.55}
+            stroke="#c9a227"
+            strokeWidth={1}
+          />
         ))}
-        {selected && selectedType && selectedType.fireRange > 0 &&
+        {selected &&
+          selectedType &&
+          selectedType.fireRange > 0 &&
           hexes
             .filter((h) => {
               const d = hexDistance(h, selected.hex);
               return d >= 1 && d <= selectedType.fireRange && visible.has(hexKey(h));
             })
-            .map((h) => <polygon key={`f${hexKey(h)}`} points={hexCorners(h, 24)} fill="none" stroke="#b3261e" strokeDasharray="3 3" strokeWidth={1} />)}
+            .map((h) => (
+              <polygon
+                key={`f${hexKey(h)}`}
+                points={hexCorners(h, 24)}
+                fill="none"
+                stroke="#b3261e"
+                strokeDasharray="3 3"
+                strokeWidth={1}
+              />
+            ))}
       </g>
 
       {/* Doelen. */}
@@ -203,10 +269,23 @@ export function HexMap({ view, selectedUnitId, proposals, onHexClick }: Props) {
           const color = o.controller ? SIDE_COLORS[o.controller].stroke : '#5b5a55';
           return (
             <g key={o.id} transform={`translate(${x}, ${y})`} data-testid={`objective-${o.id}`}>
-              <circle r={26} fill="none" stroke={color} strokeWidth={3} strokeDasharray="6 3" opacity={0.9} />
+              <circle
+                r={26}
+                fill="none"
+                stroke={color}
+                strokeWidth={3}
+                strokeDasharray="6 3"
+                opacity={0.9}
+              />
               <g transform="translate(18, -20)">
                 <circle r={8} fill={color} />
-                <text textAnchor="middle" dominantBaseline="central" fill="#fff" fontSize={10} fontWeight={700}>
+                <text
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fill="#fff"
+                  fontSize={10}
+                  fontWeight={700}
+                >
                   {o.id}
                 </text>
               </g>
@@ -223,7 +302,9 @@ export function HexMap({ view, selectedUnitId, proposals, onHexClick }: Props) {
         })}
         {proposals.map((p) => {
           const unit = unitsById.get(p.unitId);
-          return unit && p.valid ? <OrderArrow key={`s-${p.unitId}`} start={unit.hex} order={p.order} staff /> : null;
+          return unit && p.valid ? (
+            <OrderArrow key={`s-${p.unitId}`} start={unit.hex} order={p.order} staff />
+          ) : null;
         })}
       </g>
 
@@ -234,7 +315,13 @@ export function HexMap({ view, selectedUnitId, proposals, onHexClick }: Props) {
           const type = view.catalog.unitTypes[s.type];
           return (
             <g key={s.unitId} transform={`translate(${x}, ${y})`}>
-              <UnitCounter side={view.opponent} icon={type?.icon ?? []} strength={s.strength} maxStrength={type?.maxStrength ?? 10} ghost />
+              <UnitCounter
+                side={view.opponent}
+                icon={type?.icon ?? []}
+                strength={s.strength}
+                maxStrength={type?.maxStrength ?? 10}
+                ghost
+              />
               <text y={22} textAnchor="middle" fontSize={7} fill="#8a1c1c">
                 beurt {s.turn}
               </text>
@@ -249,10 +336,25 @@ export function HexMap({ view, selectedUnitId, proposals, onHexClick }: Props) {
           const type = unitTypeOf(view.catalog, u);
           const { x, y } = hexToPixel(u.hex);
           return (
-            <g key={u.id} className="unit" style={{ transform: `translate(${x}px, ${y}px)` }} data-unit={u.id}>
-              {u.id === selectedUnitId && <circle r={23} fill="none" stroke="#c9a227" strokeWidth={3} />}
-              <UnitCounter side={u.side} icon={type.icon} strength={u.strength} maxStrength={type.maxStrength} label={type.short} />
-              {view.orders[u.id] && <circle cx={17} cy={-11} r={3.5} fill="#2e7d32" stroke="#fff" strokeWidth={1} />}
+            <g
+              key={u.id}
+              className="unit"
+              style={{ transform: `translate(${x}px, ${y}px)` }}
+              data-unit={u.id}
+            >
+              {u.id === selectedUnitId && (
+                <circle r={23} fill="none" stroke="#c9a227" strokeWidth={3} />
+              )}
+              <UnitCounter
+                side={u.side}
+                icon={type.icon}
+                strength={u.strength}
+                maxStrength={type.maxStrength}
+                label={type.short}
+              />
+              {view.orders[u.id] && (
+                <circle cx={17} cy={-11} r={3.5} fill="#2e7d32" stroke="#fff" strokeWidth={1} />
+              )}
             </g>
           );
         })}
@@ -260,8 +362,19 @@ export function HexMap({ view, selectedUnitId, proposals, onHexClick }: Props) {
           const type = view.catalog.unitTypes[e.type];
           const { x, y } = hexToPixel(e.hex);
           return (
-            <g key={e.id} className="unit" style={{ transform: `translate(${x}px, ${y}px)` }} data-unit={e.id}>
-              <UnitCounter side={view.opponent} icon={type?.icon ?? []} strength={e.strength} maxStrength={type?.maxStrength ?? 10} label={type?.short} />
+            <g
+              key={e.id}
+              className="unit"
+              style={{ transform: `translate(${x}px, ${y}px)` }}
+              data-unit={e.id}
+            >
+              <UnitCounter
+                side={view.opponent}
+                icon={type?.icon ?? []}
+                strength={e.strength}
+                maxStrength={type?.maxStrength ?? 10}
+                label={type?.short}
+              />
             </g>
           );
         })}

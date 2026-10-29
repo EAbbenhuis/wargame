@@ -85,7 +85,15 @@ export function createGameStore(initial: Partial<GameSetup> = {}) {
         seed: setup.seed,
         controllers: { blue: { kind: 'human' }, red: { kind: 'ai', posture: setup.posture } },
       });
-      set({ screen: 'game', setup, game, actions: [], selectedUnitId: null, notice: null, showReport: false });
+      set({
+        screen: 'game',
+        setup,
+        game,
+        actions: [],
+        selectedUnitId: null,
+        notice: null,
+        showReport: false,
+      });
     },
 
     dispatch: (action) => {
@@ -171,13 +179,19 @@ export function createGameStore(initial: Partial<GameSetup> = {}) {
       const { game } = get();
       if (!game) return;
       const next = autoPlayUntil(game, turn, 'blue', 'balanced');
-      set({ game: next, selectedUnitId: null, screen: next.phase === 'ended' ? 'end' : 'game', showReport: false });
+      set({
+        game: next,
+        selectedUnitId: null,
+        screen: next.phase === 'ended' ? 'end' : 'game',
+        showReport: false,
+      });
     },
 
     setFogOff: (value) => set({ fogOff: value }),
     setNotice: (notice) => set({ notice }),
     closeReport: () => set({ showReport: false }),
-    backToStart: () => set({ screen: 'start', game: null, actions: [], selectedUnitId: null, notice: null }),
+    backToStart: () =>
+      set({ screen: 'start', game: null, actions: [], selectedUnitId: null, notice: null }),
   }));
 }
 

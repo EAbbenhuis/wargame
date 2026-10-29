@@ -38,3 +38,4 @@ export {
   type NameLookup,
 } from './text/describe.ts';
 export * from './staff/index.ts';
+export { buildAfterActionReport, type AfterActionReport, type TurningPoint } from './aar.ts';

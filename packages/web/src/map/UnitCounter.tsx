@@ -18,7 +18,9 @@ function Shape({ shape, stroke }: { shape: IconShape; stroke: string }) {
   const common = { stroke, strokeWidth: 1.4, vectorEffect: 'non-scaling-stroke' as const };
   switch (shape.kind) {
     case 'line':
-      return <line x1={sx(shape.x1)} y1={sy(shape.y1)} x2={sx(shape.x2)} y2={sy(shape.y2)} {...common} />;
+      return (
+        <line x1={sx(shape.x1)} y1={sy(shape.y1)} x2={sx(shape.x2)} y2={sy(shape.y2)} {...common} />
+      );
     case 'ellipse':
       return (
         <ellipse
@@ -32,7 +34,13 @@ function Shape({ shape, stroke }: { shape: IconShape; stroke: string }) {
       );
     case 'circle':
       return (
-        <circle cx={sx(shape.cx)} cy={sy(shape.cy)} r={(shape.r / 100) * W} fill={shape.filled ? stroke : 'none'} {...common} />
+        <circle
+          cx={sx(shape.cx)}
+          cy={sy(shape.cy)}
+          r={(shape.r / 100) * W}
+          fill={shape.filled ? stroke : 'none'}
+          {...common}
+        />
       );
     case 'polyline': {
       const points = shape.points.map(([x, y]) => `${sx(x)},${sy(y)}`).join(' ');
@@ -83,7 +91,12 @@ export function UnitCounter({ side, icon, strength, maxStrength, label, ghost }:
       <defs>
         <clipPath id={clipId}>{frame}</clipPath>
       </defs>
-      <g fill={ghost ? 'none' : fill} stroke={stroke} strokeWidth={1.6} strokeDasharray={ghost ? '3 2' : undefined}>
+      <g
+        fill={ghost ? 'none' : fill}
+        stroke={stroke}
+        strokeWidth={1.6}
+        strokeDasharray={ghost ? '3 2' : undefined}
+      >
         {frame}
       </g>
       <g clipPath={`url(#${clipId})`}>
@@ -92,17 +105,34 @@ export function UnitCounter({ side, icon, strength, maxStrength, label, ghost }:
         ))}
       </g>
       {ghost ? (
-        <text y={1} textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight={700} fill={stroke}>
+        <text
+          y={1}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={12}
+          fontWeight={700}
+          fill={stroke}
+        >
           ?
         </text>
       ) : (
         <g transform={`translate(${-W / 2}, ${H / 2 + (side === 'red' ? 8 : 3)})`}>
           <rect width={W} height={3.5} fill="#ffffffaa" stroke={stroke} strokeWidth={0.5} />
-          <rect width={W * ratio} height={3.5} fill={ratio > 0.5 ? '#3f6b35' : ratio > 0.25 ? '#b8860b' : '#9b2c2c'} />
+          <rect
+            width={W * ratio}
+            height={3.5}
+            fill={ratio > 0.5 ? '#3f6b35' : ratio > 0.25 ? '#b8860b' : '#9b2c2c'}
+          />
         </g>
       )}
       {label && (
-        <text y={-H / 2 - (side === 'red' ? 9 : 3)} textAnchor="middle" fontSize={7.5} fill={stroke} fontWeight={600}>
+        <text
+          y={-H / 2 - (side === 'red' ? 9 : 3)}
+          textAnchor="middle"
+          fontSize={7.5}
+          fill={stroke}
+          fontWeight={600}
+        >
           {label}
         </text>
       )}
