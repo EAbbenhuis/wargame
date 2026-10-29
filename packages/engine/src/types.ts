@@ -255,7 +255,10 @@ export type ActionResult =
 export type GameEvent =
   | {
       type: 'fire';
-      unitId: string;
+      /** null als deze kant de vurende eenheid niet kan zien. */
+      unitId: string | null;
+      /** Waar de vurende eenheid stond (null als onbekend voor deze kant). */
+      from: Hex | null;
       side: Side;
       target: Hex;
       targetUnitId: string | null;
@@ -285,7 +288,7 @@ export type GameEvent =
       targetId: string;
       reason: 'gone' | 'notAdjacent';
     }
-  | { type: 'retreat'; unitId: string; side: Side; from: Hex; to: Hex | null }
+  | { type: 'retreat'; unitId: string; side: Side; from: Hex; to: Hex | null; toHidden?: boolean }
   | { type: 'destroyed'; unitId: string; side: Side; at: Hex }
   | { type: 'resupplied'; unitId: string; side: Side; amount: number }
   | { type: 'captured'; objectiveId: string; side: Side; from: Side | null };

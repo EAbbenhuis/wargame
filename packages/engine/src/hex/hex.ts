@@ -82,16 +82,20 @@ function cubeRound(q: number, r: number): Hex {
 /**
  * Alle hexen op de rechte lijn van `from` naar `to`, inclusief begin en eind.
  * Een kleine verschuiving (epsilon) zorgt dat een lijn precies langs een hexrand
- * altijd dezelfde kant kiest: deterministisch.
+ * altijd dezelfde kant kiest: deterministisch. Met nudge -1 kies je de andere kant
+ * (zichtlijnen proberen beide, zodat zicht symmetrisch is).
  */
-export function hexLine(from: Hex, to: Hex): Hex[] {
+export function hexLine(from: Hex, to: Hex, nudge: 1 | -1 = 1): Hex[] {
   const n = hexDistance(from, to);
   if (n === 0) return [from];
-  const eps = 1e-6;
-  const aq = from.q + eps;
-  const ar = from.r + eps;
-  const bq = to.q + eps;
-  const br = to.r + eps;
+  // q en r krijgen een verschillende verschuiving: zo is er nooit een gelijkspel bij het afronden,
+  // ook niet op een hoekpunt waar drie hexen samenkomen.
+  const eq = 1e-6 * nudge;
+  const er = 2e-6 * nudge;
+  const aq = from.q + eq;
+  const ar = from.r + er;
+  const bq = to.q + eq;
+  const br = to.r + er;
   const result: Hex[] = [];
   for (let i = 0; i <= n; i++) {
     const t = i / n;

@@ -53,7 +53,8 @@ export const POSTURES: Posture[] = [
   {
     id: 'defensive',
     name: 'Verdedigend',
-    description: 'Graaft in bij de doelen en valt alleen aan bij grote overmacht.',
+    description:
+      'Graaft in bij de doelen en valt alleen aan bij grote overmacht. De zwaarste tegenstander.',
     objective: 14,
     attack: 3,
     minOdds: 2.5,

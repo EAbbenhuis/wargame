@@ -27,12 +27,16 @@ export function canSee(state: VisionState, observer: Unit, target: Hex): boolean
   if (distance > range) return false;
   if (distance <= 1) return true;
   const elevation = here?.elevation ?? 0;
-  const line = hexLine(observer.hex, target);
-  for (const hex of line.slice(1, -1)) {
-    const terrain = terrainAt(state.map, state.catalog, hex);
-    if (terrain?.blocksSight && terrain.elevation >= elevation) return false;
-  }
-  return true;
+  // Een lijn precies langs een hexrand kan twee kanten op; het zicht is vrij als één van
+  // beide vrij is. Zo geldt: als A B ziet, ziet B ook A.
+  const clear = (nudge: 1 | -1) =>
+    hexLine(observer.hex, target, nudge)
+      .slice(1, -1)
+      .every((hex) => {
+        const terrain = terrainAt(state.map, state.catalog, hex);
+        return !(terrain?.blocksSight && terrain.elevation >= elevation);
+      });
+  return clear(1) || clear(-1);
 }
 
 /** Alle hexen die een kant nu kan zien. */

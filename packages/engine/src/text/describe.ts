@@ -32,10 +32,12 @@ export function describeEvent(
   objectiveName: (id: string) => string = (id) => id,
 ): string {
   switch (event.type) {
-    case 'fire':
+    case 'fire': {
+      const shooter = event.unitId ? name(event.unitId) : 'Onbekende vijandelijke artillerie';
       return event.targetUnitId
-        ? `${name(event.unitId)} vuurt op ${name(event.targetUnitId)} ${describeHex(event.target)}: ${event.damage} schade (worp ${event.roll}).`
-        : `${name(event.unitId)} vuurt op ${describeHex(event.target)}, maar daar staat niemand meer.`;
+        ? `${shooter} vuurt op ${name(event.targetUnitId)} ${describeHex(event.target)}: ${event.damage} schade (worp ${event.roll}).`
+        : `${shooter} vuurt op ${describeHex(event.target)}, maar daar staat niemand meer.`;
+    }
     case 'move':
       return `${name(event.unitId)} verplaatst naar ${describeHex(event.path.at(-1)!)}.`;
     case 'halted':
@@ -60,6 +62,7 @@ export function describeEvent(
         ? `Aanval van ${name(event.unitId)} gaat niet door: het doelwit bestaat niet meer.`
         : `Aanval van ${name(event.unitId)} gaat niet door: ${name(event.targetId)} staat niet meer ernaast.`;
     case 'retreat':
+      if (event.toHidden) return `${name(event.unitId)} trekt terug, buiten ons zicht.`;
       return event.to
         ? `${name(event.unitId)} trekt terug naar ${describeHex(event.to)}.`
         : `${name(event.unitId)} kan nergens heen en lijdt extra verliezen.`;

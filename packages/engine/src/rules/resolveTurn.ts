@@ -84,6 +84,7 @@ function firePhase(state: GameState, events: GameEvent[]): void {
     events.push({
       type: 'fire',
       unitId: unit.id,
+      from: unit.hex,
       side: unit.side,
       target: order.target,
       targetUnitId: target && target.side !== unit.side ? target.id : null,
@@ -112,6 +113,7 @@ interface Mover {
   waited: number;
   done: boolean;
   traveled: Hex[];
+  origin: Hex;
 }
 
 function moveAll(state: GameState, events: GameEvent[]): void {
@@ -127,6 +129,7 @@ function moveAll(state: GameState, events: GameEvent[]): void {
         waited: 0,
         done: false,
         traveled: [],
+        origin: unit.hex,
       });
     }
   }
@@ -156,12 +159,14 @@ function moveAll(state: GameState, events: GameEvent[]): void {
         halted(m, 'contact');
         continue;
       }
-      if (there) {
-        // Eigen eenheid in de weg: wachten. Na drie tikken wachten geeft de eenheid het op.
+      const isLastStep = m.step === m.path.length - 1;
+      if (there && isLastStep) {
+        // Eigen eenheid op de eindbestemming: wachten. Na drie tikken geeft de eenheid het op.
         m.waited += 1;
         if (m.waited > 3) halted(m, 'blocked');
         continue;
       }
+      // Een eigen eenheid halverwege het pad: daar mag je doorheen (zoals bij het plannen).
       const list = wants.get(hexKey(next)) ?? [];
       list.push(m);
       wants.set(hexKey(next), list);
@@ -194,6 +199,22 @@ function moveAll(state: GameState, events: GameEvent[]): void {
         (u) => u.side !== m.unit.side && hexDistance(u.hex, m.unit.hex) === 1,
       );
       if (nextToEnemy && m.step < m.path.length) halted(m, 'contact');
+    }
+  }
+  // Wie onderweg stopte op de hex van een eigen eenheid (bijvoorbeeld door contact), gaat terug
+  // langs zijn eigen pad naar de eerste vrije hex. Zo staan er nooit twee eenheden op één hex.
+  for (const m of movers) {
+    if (m.traveled.length === 0) continue;
+    const sharing = () =>
+      aliveUnits(state.units).some(
+        (u) => u.id !== m.unit.id && hexKey(u.hex) === hexKey(m.unit.hex),
+      );
+    if (!sharing()) continue;
+    const back = [...m.traveled.slice(0, -1).reverse(), m.origin];
+    for (const hex of back) {
+      m.unit.hex = hex;
+      m.traveled = m.traveled.slice(0, m.traveled.findIndex((h) => hexKey(h) === hexKey(hex)) + 1);
+      if (!sharing()) break;
     }
   }
   for (const m of movers) {

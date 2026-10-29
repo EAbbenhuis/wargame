@@ -68,6 +68,17 @@ describe('beweging met terreinkosten', () => {
     expect(r.has(hexKey(at(3, 3)))).toBe(true);
   });
 
+  it('gaat door een eigen eenheid heen als dat de enige route is', () => {
+    // Een gang tussen twee rivieren: pantser kan alleen via de hex van de eigen eenheid.
+    const map = ['~~~~~~~~~~', '..........', '~~~~~~~~~~'];
+    const state = testGame({
+      map,
+      units: [unit('b1', 'blue', 'armor', 1, 1), unit('b2', 'blue', 'armor', 2, 1)],
+    });
+    const path = findPath(getPlayerView(state, 'blue'), 'b1', at(4, 1));
+    expect(path).toEqual([at(2, 1), at(3, 1), at(4, 1)]);
+  });
+
   it('vindt het goedkoopste pad om bos heen', () => {
     const map = openMap();
     map[3] = '..BB......';

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { POSTURES } from '../data/index.ts';
 import { applyAction, createGame } from '../game.ts';
 import { validateOrder } from '../rules/orders.ts';
-import { at, testGame, unit } from '../testing/fixtures.ts';
+import { testGame, unit } from '../testing/fixtures.ts';
 import type { GameState, Side } from '../types.ts';
 import { getPlayerView } from '../view.ts';
 import { autoPlayTurn } from './autoplay.ts';
@@ -107,6 +107,5 @@ describe('AI-tegenstander', () => {
       next.units.b1!.hex.q + (next.units.b1!.hex.r - (next.units.b1!.hex.r & 1)) / 2 - 8,
     );
     expect(after).toBeLessThan(before);
-    expect(at(1, 3)).toBeDefined();
   });
 });

@@ -22,9 +22,12 @@ function files(dir: string, ext: RegExp): string[] {
   });
 }
 
-/** Zo zou iemand een drone toevoegen: één object in data/unitTypes.ts. */
+/**
+ * Zo zou iemand een drone toevoegen: één object in data/unitTypes.ts. (Id 'test-drone', zodat hij
+ * niet botst met een echte drone als die later wordt toegevoegd.)
+ */
 const DRONE: UnitType = {
-  id: 'drone',
+  id: 'test-drone',
   name: 'Drone',
   short: 'UAV',
   description: 'Onbemand vliegtuigje: ziet ver, vecht niet.',
@@ -42,7 +45,7 @@ const DRONE: UnitType = {
 
 describe('uitbreidbaarheid via data/', () => {
   afterEach(() => {
-    const i = UNIT_TYPES.findIndex((t) => t.id === 'drone');
+    const i = UNIT_TYPES.findIndex((t) => t.id === 'test-drone');
     if (i >= 0) UNIT_TYPES.splice(i, 1);
   });
 
@@ -54,7 +57,7 @@ describe('uitbreidbaarheid via data/', () => {
       scenario: testScenario({
         map,
         units: [
-          unit('b-uav', 'blue', 'drone', 0, 3),
+          unit('b-uav', 'blue', 'test-drone', 0, 3),
           unit('b-inf', 'blue', 'infantry', 0, 0),
           unit('r1', 'red', 'infantry', 8, 2),
         ],

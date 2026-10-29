@@ -96,14 +96,31 @@ _29 oktober 2026. Aanbeveling van Claude._
 
 **Wat.**
 
-- Blauw heeft 9 eenheden, rood 7.
+- Blauw heeft 9 eenheden: 3 infanterie, 3 pantser, artillerie, verkenning en logistiek.
+- Rood heeft 7 eenheden: 3 infanterie, 1 pantser, artillerie, verkenning en logistiek.
 - De Grensbrug is bij de start van niemand.
 - Een rivier geeft de verdediging x0,7.
 - Overwinning: doelwaarde + 0,2 punt per verloren vijandelijk sterktepunt; nodig is 2 punten verschil.
 
-**Waarom.** Met 8 tegen 8 en een rivier van x0,5 won blauw (als computer gespeeld) 1 tot 5 van de 40 spellen. Met de huidige instellingen wint blauw (computer, evenwichtig) 25 van de 40 spellen tegen rood "evenwichtig" (62%).
+**Hoe gemeten.** Met `scripts/balance.ts`: de computer speelt beide kanten, over 40 seeds.
 
-**Let op.** Gemeten met de computer aan beide kanten (`scripts/balance.ts`), niet met mensen. Een mens speelt anders (beter samenwerkende aanvallen, of juist onvoorzichtiger).
+| Rood        | Blauw wint | Rood wint | Onbeslist |
+| ----------- | ---------- | --------- | --------- |
+| Evenwichtig | 18 (45%)   | 19        | 3         |
+| Aanvallend  | 17         | 9         | 14        |
+| Verdedigend | 1          | 39        | 0         |
+
+**Hoe we hier kwamen.**
+
+1. Met 8 tegen 8 en een rivier van x0,5 won blauw-als-computer maar 1 tot 5 van de 40 spellen.
+2. Met 9 tegen 7, de Grensbrug neutraal en een rivier van x0,7 was dat 62%.
+3. Na het herstellen van een zichtfout (zicht was niet symmetrisch, zie de review in de PR) en van door-eigen-eenheden-bewegen zakte dat naar 25%.
+4. Daarom is de tweede rode tankcompagnie vervangen door infanterie.
+
+**Let op.**
+
+- "Verdedigend" is voor de computer-blauw bijna onverslaanbaar. Het staat in het spel aangeduid als de zwaarste tegenstander.
+- Alles is gemeten met de computer aan beide kanten, niet met mensen. Een mens bundelt aanvallen anders. Speel het zelf en stel bij in het scenario.
 
 ---
 

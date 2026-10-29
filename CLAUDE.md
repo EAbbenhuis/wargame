@@ -101,10 +101,11 @@ Voorbeeldopdrachten om te plakken: `docs/modding.md`.
 - **Zicht in tests.** Een eenheid ziet maar 2 tot 5 hexen ver. Een aanval op een vijand die je niet ziet, wordt (terecht) geweigerd. Zet zo nodig een verkenningseenheid in de test.
 - **Snelheid.** De AI berekent veel mogelijke zetten. Kopieer de toestand niet onnodig (`structuredClone` van de hele toestand was eerst de grootste vertraging) en gebruik `reachablePaths` (één zoektocht per eenheid) in plaats van per hex opnieuw te zoeken. Een volledig computerspel duurt nu ongeveer 150 ms.
 - **Determinisme in de AI.** Bij gelijke scores moet de keuze vast liggen (sorteer op id of hexsleutel). Itereer niet over objecten waarvan de volgorde kan verschillen zonder te sorteren.
-- **Balans.** Verander je eenheden of de kaart, meet dan met `scripts/balance.ts`. Doel: blauw (computer) wint ongeveer 60% tegen rood "evenwichtig". Een mens speelt anders dan de computer; dat is niet gemeten.
+- **Balans.** Verander je eenheden, de kaart of een regel? Meet dan met `scripts/balance.ts`. Nu wint blauw (computer) 45% tegen rood "evenwichtig" (zie `docs/BESLISSINGEN.md` B5). Kleine regelwijzigingen kunnen dat flink verschuiven: na het repareren van het zicht ging het van 62% naar 25%. Een mens speelt anders dan de computer; dat is niet gemeten.
 - **Waar ligt een plek op de kaart?** Kolom en rij staan bij `placeNames` in het scenario, en in het spel ziet u ze als u met de muis over een hex gaat (tooltip "(kolom,rij)"). De kaart in het scenario is tekst: rij 0 bovenaan, kolom 0 links.
 - **Nieuw terrein met een eigen patroon** (bossymbooltjes, golfjes): voeg de naam toe aan `pattern` in `types.ts`, aan `PATTERN_ID` en een `<pattern>` in `web/src/map/HexMap.tsx`. Alleen een kleur kan ook; dan is `data/terrains.ts` genoeg.
 - **Teksten die regels noemen.** De omschrijvingen in `data/unitTypes.ts` (bijvoorbeeld "kan niet door een rivier") en de briefing in het scenario zijn gewone tekst. Pas ze aan als je de regels verandert. De terreinregels voor het taalmodel worden wel automatisch uit de data gemaakt.
+- **Nieuwe eigenschap op een eenheidstype?** Maak hem optioneel (`veld?: ...`), anders breekt het voorbeeld in `extensibility.test.ts` en elk bestaand type. `game.test.ts` controleert dat Operatie Grensbrug 6 tot 9 eenheden per kant heeft (een eis van de opdracht); geef je blauw een tiende eenheid, pas dan bewust die test aan.
 - **CSS-klassen.** Gebruik unieke klassenamen (er was een botsing tussen `.staff` voor het paneel en een legenda-icoontje).
 
 ## Documentatie en geheugen

@@ -66,7 +66,7 @@ export const GRENSBRUG: Scenario = {
     { id: 'r-inf-1', side: 'red', type: 'infantry', name: 'Bataljon Wolf', col: 13, row: 5 },
     { id: 'r-inf-2', side: 'red', type: 'infantry', name: 'Bataljon Beer', col: 16, row: 10 },
     { id: 'r-arm-1', side: 'red', type: 'armor', name: 'Tankcompagnie Lynx', col: 16, row: 4 },
-    { id: 'r-arm-2', side: 'red', type: 'armor', name: 'Tankcompagnie Stier', col: 17, row: 8 },
+    { id: 'r-inf-3', side: 'red', type: 'infantry', name: 'Bataljon Das', col: 17, row: 8 },
     { id: 'r-art-1', side: 'red', type: 'artillery', name: 'Batterij Hamer', col: 15, row: 7 },
     { id: 'r-rec-1', side: 'red', type: 'recon', name: 'Verkenners Valk', col: 12, row: 3 },
     { id: 'r-log-1', side: 'red', type: 'logistics', name: 'Logistiek Muildier', col: 18, row: 6 },

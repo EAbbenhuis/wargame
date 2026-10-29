@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { hexKey } from '../hex/hex.ts';
 import { at, openMap, testGame, unit } from '../testing/fixtures.ts';
+import { applyAction, replay } from '../game.ts';
 import { getPlayerView } from '../view.ts';
 import { visibleHexes } from './vision.ts';
 
@@ -60,6 +61,53 @@ describe('zicht en fog of war', () => {
     expect(json).not.toContain('r-geheim');
     expect(json).not.toContain('"seed"');
     expect(json).not.toContain('"rng"');
+  });
+
+  it('onthoudt waar een vijand het laatst gezien is, en vergeet dat als de plek leeg blijkt', () => {
+    let state = testGame({
+      units: [unit('b1', 'blue', 'recon', 0, 3), unit('r1', 'red', 'infantry', 4, 3)],
+    });
+    expect(getPlayerView(state, 'blue').enemies.map((e) => e.id)).toEqual(['r1']);
+    // Rood trekt weg uit zicht.
+    state = applyAction(state, {
+      type: 'setOrder',
+      side: 'red',
+      unitId: 'r1',
+      order: { kind: 'move', path: [at(5, 3), at(6, 3), at(7, 3)] },
+    }).state;
+    state = replay(state, [
+      { type: 'endTurn', side: 'blue' },
+      { type: 'endTurn', side: 'red' },
+    ]);
+    const view = getPlayerView(state, 'blue');
+    expect(view.enemies).toEqual([]);
+    // De oude plek (4,3) is nog in zicht en leeg: dus vergeten.
+    expect(view.lastSeen).toEqual([]);
+  });
+
+  it('houdt een herinnering vast als de oude plek niet meer te zien is', () => {
+    let state = testGame({
+      units: [unit('b1', 'blue', 'recon', 0, 3), unit('r1', 'red', 'infantry', 4, 3)],
+    });
+    state = applyAction(state, {
+      type: 'setOrder',
+      side: 'blue',
+      unitId: 'b1',
+      order: { kind: 'move', path: [at(0, 4), at(0, 5), at(0, 6), at(0, 7)] },
+    }).state;
+    state = applyAction(state, {
+      type: 'setOrder',
+      side: 'red',
+      unitId: 'r1',
+      order: { kind: 'move', path: [at(5, 2), at(6, 1)] },
+    }).state;
+    state = replay(state, [
+      { type: 'endTurn', side: 'blue' },
+      { type: 'endTurn', side: 'red' },
+    ]);
+    const view = getPlayerView(state, 'blue');
+    expect(view.enemies).toEqual([]);
+    expect(view.lastSeen.map((s) => [s.unitId, s.turn])).toEqual([['r1', 1]]);
   });
 
   it('kan de fog of war uitzetten (alleen voor het debugmenu)', () => {

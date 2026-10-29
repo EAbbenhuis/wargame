@@ -88,7 +88,7 @@ export function getPlayerView(
   const lastRecord = state.history.at(-1);
   const lastTurnEvents = lastRecord
     ? lastRecord.events.flatMap((e) => {
-        const seen = observe(structuredClone(e), side, visible, revealed);
+        const seen = observeEvent(structuredClone(e), side, visible, revealed);
         return seen ? [seen] : [];
       })
     : [];
@@ -150,7 +150,7 @@ function allHexKeys(map: GameMap): HexKey[] {
  * Wat ziet deze kant van een gebeurtenis? Eigen eenheden: alles. Vijandelijke acties alleen
  * voor zover ze plaatsvonden op hexen die je nu ziet. `null` = niets gezien.
  */
-function observe(
+export function observeEvent(
   event: GameEvent,
   side: Side,
   visible: Set<HexKey>,
@@ -163,8 +163,13 @@ function observe(
     case 'captured':
       // Bij een gevecht is altijd een eigen eenheid betrokken; wie een doel bezit is bekend.
       return event;
-    case 'fire':
-      return event.side === side || seen(event.target) ? event : null;
+    case 'fire': {
+      if (event.side === side) return event;
+      if (!seen(event.target)) return null;
+      // Je merkt de inslag, maar weet niet welke eenheid vuurde als je die niet ziet.
+      const shooterSeen = event.from !== null && seen(event.from);
+      return shooterSeen ? event : { ...event, unitId: null, from: null };
+    }
     case 'move': {
       if (event.side === side) return event;
       const path = event.path.filter(seen);
@@ -174,7 +179,10 @@ function observe(
     case 'destroyed':
       return event.side === side || seen(event.at) ? event : null;
     case 'retreat':
-      return event.side === side || seen(event.from) ? event : null;
+      if (event.side === side) return event;
+      if (!seen(event.from)) return null;
+      // Je ziet de vijand vertrekken, maar niet waarheen als die hex buiten zicht ligt.
+      return event.to && !seen(event.to) ? { ...event, to: null, toHidden: true } : event;
     case 'attackCancelled':
     case 'resupplied':
       return event.side === side ? event : null;

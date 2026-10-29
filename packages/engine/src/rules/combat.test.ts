@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { defaultCatalog } from '../data/index.ts';
 import { at, openMap } from '../testing/fixtures.ts';
 import { createGame } from '../game.ts';
 import { combatResult, computeOdds, type Combatant } from './combat.ts';
@@ -18,7 +17,6 @@ const c = (type: string, col: number, row: number, strength = 10): Combatant => 
 });
 
 describe('gevecht', () => {
-  const catalog = defaultCatalog();
   const open = board(openMap());
 
   it('vergelijkt aanval en verdediging: infanterie tegen infanterie op open terrein is 4 tegen 5', () => {
@@ -99,6 +97,5 @@ describe('gevecht', () => {
     expect(odds.column).toBe('3:2'); // 7 : 5 = 1,4
     expect(combatResult(odds, 6)).toEqual({ attacker: 0, defender: 4, retreat: true });
     expect(combatResult(odds, 1)).toEqual({ attacker: 2, defender: 1, retreat: false });
-    expect(catalog.unitTypes.armor).toBeDefined();
   });
 });
