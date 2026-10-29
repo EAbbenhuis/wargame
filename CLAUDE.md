@@ -53,7 +53,7 @@ data/ (eenheden, terrein, scenario's)  ──►  engine: applyAction ──► 
 
 | Wat                                    | Commando                                                          | Duur (ongeveer) |
 | -------------------------------------- | ----------------------------------------------------------------- | --------------- |
-| Installeren                            | `npm install`                                                     | 30 s            |
+| Installeren                            | `npm install`                                                     | 5–30 s          |
 | Spel + staf-server starten             | `npm run dev` en open http://localhost:5173                       | 2 s             |
 | Alleen het spel                        | `npm run dev:web`                                                 | 1 s             |
 | Alle tests                             | `npm test`                                                        | 3 s             |
