@@ -67,6 +67,17 @@ export interface GameStoreState {
 
 export const DEFAULT_SETUP: GameSetup = { scenarioId: 'grensbrug', seed: 1, posture: 'balanced' };
 
+/**
+ * Seed voor een nieuw spel: uit de adresbalk (?seed=42) om een spel na te spelen, anders
+ * willekeurig zodat elk spel anders verloopt. (Toeval mag hier: dit is de web-app, niet de engine.)
+ */
+export function initialSeed(search: string): number {
+  const fromUrl = Number(new URLSearchParams(search).get('seed'));
+  return Number.isInteger(fromUrl) && fromUrl > 0
+    ? fromUrl
+    : 1 + Math.floor(Math.random() * 99_999);
+}
+
 export function createGameStore(initial: Partial<GameSetup> = {}) {
   return createStore<GameStoreState>()((set, get) => ({
     screen: 'start',
@@ -203,7 +214,9 @@ export function currentView(state: Pick<GameStoreState, 'game' | 'fogOff'>): Pla
   return getPlayerView(state.game, 'blue', { revealAll: state.fogOff });
 }
 
-export const gameStore = createGameStore();
+export const gameStore = createGameStore({
+  seed: initialSeed(typeof location === 'undefined' ? '' : location.search),
+});
 
 export function useGame<T>(selector: (state: GameStoreState) => T): T {
   return useStore(gameStore, selector);
