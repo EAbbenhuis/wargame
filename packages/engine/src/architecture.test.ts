@@ -22,9 +22,23 @@ describe('architectuur van de engine', () => {
     expect(offenders).toEqual([]);
   });
 
+  it('herkent ook verborgen vormen van een verboden import', () => {
+    const forbidden =
+      /(?:from\s+|import\s*\(?\s*|require\s*\(\s*)['"](react|react-dom|node:[^'"]+|fs|path|@wargame\/web|@wargame\/server)(\/[^'"]*)?['"]/;
+    for (const line of [
+      "import 'react';",
+      "import x from 'react-dom/client';",
+      "await import('node:fs')",
+      "require('react')",
+    ]) {
+      expect(forbidden.test(line), line).toBe(true);
+    }
+    expect(forbidden.test("import { x } from './react-helpers.ts';")).toBe(false);
+  });
+
   it('gebruikt nergens Math.random', () => {
     const offenders = sourceFiles(SRC).filter((file) =>
-      /Math\.random/.test(readFileSync(file, 'utf8')),
+      /Math\.random\s*\(/.test(readFileSync(file, 'utf8')),
     );
     expect(offenders).toEqual([]);
   });

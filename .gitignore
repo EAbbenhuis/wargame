@@ -8,3 +8,6 @@ test-results/
 playwright-report/
 .vite/
 .DS_Store
+
+# Werkmappen van Claude Code-subagents
+.claude/worktrees/
