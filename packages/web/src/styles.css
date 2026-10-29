@@ -475,8 +475,13 @@ button.end-turn:hover:not(:disabled) {
   font-weight: 600;
 }
 .report .event.captured {
-  color: var(--blue);
   font-weight: 700;
+}
+.report .event.captured.blue {
+  color: var(--blue);
+}
+.report .event.captured.red {
+  color: var(--red);
 }
 
 /* Einde */

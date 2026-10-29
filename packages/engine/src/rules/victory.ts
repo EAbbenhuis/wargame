@@ -9,6 +9,7 @@ import type { GameState, Outcome, Side } from '../types.ts';
 import { aliveUnits } from './map.ts';
 
 const SIDE_NAME: Record<Side, string> = { blue: 'Blauw', red: 'Rood' };
+const nl = (n: number) => String(n).replace('.', ',');
 
 export function currentStrength(state: GameState, side: Side): number {
   return aliveUnits(state.units)
@@ -39,6 +40,6 @@ export function computeOutcome(state: GameState): Outcome {
       .join(', ') || 'geen doelen';
   const summary =
     (winner ? `${SIDE_NAME[winner]} wint` : 'Onbeslist') +
-    ` (${score.blue} tegen ${score.red} punten). Blauw bezit: ${held('blue')}. Rood bezit: ${held('red')}.`;
+    ` (${nl(score.blue)} tegen ${nl(score.red)} punten). Blauw bezit: ${held('blue')}. Rood bezit: ${held('red')}.`;
   return { winner, score, summary };
 }

@@ -147,6 +147,9 @@ export function planForObjective(view: PlayerView, objective: Objective): StaffP
     let bestDistance = hexDistance(unit.hex, objective.hex);
     for (const [key, info] of [...reach.entries()].sort(([a], [b]) => (a < b ? -1 : 1))) {
       if (taken.has(key)) continue;
+      // Niet in je eentje naast twee of meer vijanden gaan staan: dat is een makkelijk doelwit.
+      const enemiesNear = view.enemies.filter((e) => hexDistance(e.hex, info.hex) === 1).length;
+      if (enemiesNear >= 2) continue;
       const d = hexDistance(info.hex, objective.hex);
       if (d < bestDistance) {
         bestDistance = d;

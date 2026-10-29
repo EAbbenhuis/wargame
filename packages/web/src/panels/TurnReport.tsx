@@ -20,7 +20,7 @@ export function TurnReport({ view }: { view: PlayerView }) {
       ) : (
         <ul>
           {events.map((e, i) => (
-            <li key={i} className={`event ${e.type}`}>
+            <li key={i} className={`event ${e.type} ${e.type === 'captured' ? e.side : ''}`}>
               {describeEvent(e, name, objectiveName)}
             </li>
           ))}
