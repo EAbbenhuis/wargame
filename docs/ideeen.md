@@ -18,6 +18,8 @@ Dingen die onderweg opkwamen maar bewust niet gebouwd zijn ("niet uitdijen"). El
 
 - **Moeilijkheidsniveaus** naast houdingen (bijvoorbeeld een AI die een beurt vooruit rekent).
 - **AI die bluft of lokt** (schijnbewegingen); past goed bij gelijktijdig plannen.
+- **AI en drones:** de AI-tegenstander weet nog niet wat een drone is. Hij laat hem rondvliegen als een zwakke eenheid en soms naast of op een doel hangen. Beter: de drone gericht laten zoeken naar vijanden achter de rivier en weg laten blijven van vijanden.
+- **Drones en contact:** een drone stopt nu, net als grondtroepen, naast een vijand (zone of control) en krijgt op een heuvel de zichtbonus. Voor een vliegtuigje zou je dat kunnen uitzetten met een eigenschap in de data.
 - **AI-commentaar per beurt** via het taalmodel ("Rood lijkt zich op te maken voor een tegenstoot bij Kruisweide").
 
 ## Staf

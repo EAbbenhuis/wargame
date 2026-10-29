@@ -5,6 +5,7 @@
 //
 // Velden (zie `TerrainType` in ../types.ts):
 //   moveCost          bewegingskosten per bewegingsklasse; `default` voor de rest; null = onbegaanbaar
+//                     ('air' = vliegend, bijvoorbeeld een drone: overal 1 punt)
 //   defenseMultiplier verdediging x dit getal (1 = geen voordeel, 2 = dubbel zo sterk)
 //   cover             dekking tegen artillerie: zoveel schade minder
 //   blocksSight       blokkeert het zicht naar wat erachter ligt
@@ -21,7 +22,7 @@ export const TERRAINS: TerrainType[] = [
     name: 'Open terrein',
     symbol: '.',
     color: '#ece4c8',
-    moveCost: { default: 1 },
+    moveCost: { default: 1, air: 1 },
     defenseMultiplier: 1,
     cover: 0,
     blocksSight: false,
@@ -33,7 +34,7 @@ export const TERRAINS: TerrainType[] = [
     name: 'Bos',
     symbol: 'B',
     color: '#b9cf9a',
-    moveCost: { default: 2, tracked: 3, wheeled: 3 },
+    moveCost: { default: 2, tracked: 3, wheeled: 3, air: 1 },
     defenseMultiplier: 1.5,
     cover: 1,
     blocksSight: true,
@@ -46,7 +47,7 @@ export const TERRAINS: TerrainType[] = [
     name: 'Stad',
     symbol: 'S',
     color: '#d6c3a5',
-    moveCost: { default: 1, tracked: 2 },
+    moveCost: { default: 1, tracked: 2, air: 1 },
     defenseMultiplier: 2,
     cover: 2,
     blocksSight: true,
@@ -60,7 +61,7 @@ export const TERRAINS: TerrainType[] = [
     symbol: '~',
     color: '#a9c8de',
     // Te voet kost oversteken een hele beurt; voertuigen kunnen er niet door.
-    moveCost: { default: 3, tracked: null, wheeled: null },
+    moveCost: { default: 3, tracked: null, wheeled: null, air: 1 },
     defenseMultiplier: 0.7,
     cover: 0,
     blocksSight: false,
@@ -74,7 +75,7 @@ export const TERRAINS: TerrainType[] = [
     name: 'Heuvel',
     symbol: 'H',
     color: '#ddc99a',
-    moveCost: { default: 2 },
+    moveCost: { default: 2, air: 1 },
     defenseMultiplier: 1.5,
     cover: 1,
     blocksSight: true,
@@ -87,7 +88,7 @@ export const TERRAINS: TerrainType[] = [
     name: 'Brug',
     symbol: '=',
     color: '#c9b79a',
-    moveCost: { default: 1 },
+    moveCost: { default: 1, air: 1 },
     defenseMultiplier: 0.8,
     cover: 0,
     blocksSight: false,

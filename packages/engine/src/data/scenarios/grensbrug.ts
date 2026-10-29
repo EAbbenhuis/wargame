@@ -18,6 +18,7 @@ export const GRENSBRUG: Scenario = {
     'Roodland heeft de oostoever van de Vaal bezet. Uw brigade moet binnen 12 beurten twee van de drie ' +
     'sleutellocaties in handen hebben: de Grensbrug, het dorp Kruisweide en de Uitkijkheuvel. ' +
     'Pantser kan alleen over een brug de rivier over; infanterie kan waden, maar dat kost een hele beurt. ' +
+    'Uw drone vliegt overal overheen en ziet ver, maar kan niet vechten en geen doel innemen. ' +
     'Beide partijen geven tegelijk hun bevelen. Denk dus na over wat de tegenstander gaat doen.',
   maxTurns: 12,
   map: [
@@ -62,6 +63,7 @@ export const GRENSBRUG: Scenario = {
     { id: 'b-art-1', side: 'blue', type: 'artillery', name: 'Batterij Foxtrot', col: 2, row: 7 },
     { id: 'b-rec-1', side: 'blue', type: 'recon', name: 'Verkenners Golf', col: 6, row: 6 },
     { id: 'b-log-1', side: 'blue', type: 'logistics', name: 'Logistiek Hotel', col: 1, row: 8 },
+    { id: 'b-uav-1', side: 'blue', type: 'drone', name: 'Drone Kievit', col: 2, row: 5 },
     // Rood: de tegenstander, op de oostoever.
     { id: 'r-inf-1', side: 'red', type: 'infantry', name: 'Bataljon Wolf', col: 13, row: 5 },
     { id: 'r-inf-2', side: 'red', type: 'infantry', name: 'Bataljon Beer', col: 16, row: 10 },

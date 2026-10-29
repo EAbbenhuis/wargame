@@ -5,7 +5,7 @@
 //   2. Beweging:  alle eenheden bewegen stap voor stap tegelijk (zie moveAll hieronder).
 //   3. Gevecht:   aanvallen worden uitgevoerd als het doelwit nu naast de aanvaller staat.
 //   4. Herstel:   eenheden naast logistiek herstellen.
-//   5. Doelen:    wie op een doel staat, neemt het in.
+//   5. Doelen:    wie op een doel staat, neemt het in (behalve eenheden met holdsObjectives: false).
 //   6. Einde:     volgende beurt, of de uitslag na de laatste beurt.
 //
 // Volgorde binnen een fase is altijd op eenheid-id, zodat de uitkomst bij dezelfde seed gelijk is.
@@ -343,7 +343,9 @@ function objectivePhase(state: GameState, events: GameEvent[]): void {
   const units = aliveUnits(state.units);
   for (const objective of state.objectives) {
     const occupant = unitAt(units, objective.hex);
-    if (occupant && occupant.side !== objective.controller) {
+    // Niet elke eenheid kan een doel bezet houden (holdsObjectives: false, bijvoorbeeld een drone).
+    const canHold = occupant && unitTypeOf(state.catalog, occupant).holdsObjectives !== false;
+    if (occupant && canHold && occupant.side !== objective.controller) {
       events.push({
         type: 'captured',
         objectiveId: objective.id,

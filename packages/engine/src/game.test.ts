@@ -13,12 +13,12 @@ describe('een spel aanmaken', () => {
     }
   });
 
-  it('heeft in Operatie Grensbrug een brigade van 6 tot 9 eenheden per kant, op een kaart van 20 bij 14', () => {
+  it('heeft in Operatie Grensbrug een brigade van 6 tot 10 eenheden per kant (blauw: 9 + drone), op een kaart van 20 bij 14', () => {
     const state = createGame({ scenario: 'grensbrug' });
     const count = (side: string) =>
       Object.values(state.units).filter((u) => u.side === side).length;
     expect(count('blue')).toBeGreaterThanOrEqual(6);
-    expect(count('blue')).toBeLessThanOrEqual(9);
+    expect(count('blue')).toBeLessThanOrEqual(10);
     expect(count('red')).toBeGreaterThanOrEqual(6);
     expect(state.map.cols).toBe(20);
     expect(state.map.rows).toBe(14);

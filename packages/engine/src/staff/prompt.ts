@@ -25,7 +25,8 @@ Spelregels in het kort:
 - Elke eenheid heeft bewegingspunten; terrein kost punten (zie 'Terrein' in de situatie). Sommig terrein is voor sommige eenheden onbegaanbaar.
 - Wie naast een vijand komt, stopt. Aanvallen kan alleen op een zichtbare vijand, vanaf een buurhex.
 - Artillerie vuurt op een zichtbare hex binnen bereik, vóór alle beweging.
-- Een doel is van wie er aan het eind van de beurt op staat.
+- Een doel is van wie er aan het eind van de beurt op staat. Een eenheid met "neemtGeenDoelIn" telt daarbij niet.
+- Een eenheid met "kanNietAanvallen" kan geen aanval uitvoeren.
 
 Antwoord ALTIJD als JSON, zonder andere tekst:
 {"antwoord": "<advies in gewone taal>",
@@ -83,6 +84,8 @@ export function summarizeForModel(view: PlayerView): string {
       sterkte: `${u.strength}/${t.maxStrength}`,
       bewegingspunten: t.movement,
       ...(t.fireRange > 0 ? { vuurbereik: t.fireRange } : {}),
+      ...(t.attack <= 0 ? { kanNietAanvallen: true } : {}),
+      ...(t.holdsObjectives === false ? { neemtGeenDoelIn: true } : {}),
     };
   });
   const enemies = view.enemies.map((e) => ({

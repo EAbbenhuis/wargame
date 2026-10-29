@@ -51,6 +51,14 @@ export interface UnitType {
   firepower: number;
   /** Bevoorrading: eigen eenheden binnen dit bereik herstellen per beurt (0 = geen). */
   supplyRange: number;
+  /**
+   * Hoogte van waaraf de eenheid kijkt (standaard 0 = op de grond). Telt als terreinhoogte:
+   * blokkerend terrein dat lager ligt, blokkeert het zicht niet. Heuvels hebben hoogte 1,
+   * dus 2 (vliegend) kijkt over bos, stad en heuvels heen.
+   */
+  altitude?: number;
+  /** Kan deze eenheid een doel innemen en bezet houden? Standaard ja; false voor bijvoorbeeld een drone. */
+  holdsObjectives?: boolean;
   /** Het symbool (zie IconShape). */
   icon: IconShape[];
 }

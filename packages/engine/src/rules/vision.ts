@@ -3,7 +3,8 @@
 // Een kant ziet een hex als minstens één eigen eenheid hem ziet:
 //  - binnen zichtafstand (eenheidstype.vision + terrein.visionBonus van de hex waar de eenheid staat);
 //  - met vrije zichtlijn: hexen tussen waarnemer en doel met `blocksSight` blokkeren het zicht,
-//    behalve als de waarnemer hoger staat (terrein.elevation) dan het blokkerende terrein.
+//    behalve als de waarnemer hoger staat (terrein.elevation, of eenheidstype.altitude als die
+//    hoger is, bijvoorbeeld een drone) dan het blokkerende terrein.
 // Aangrenzende hexen zie je altijd.
 
 import {
@@ -26,7 +27,8 @@ export function canSee(state: VisionState, observer: Unit, target: Hex): boolean
   const distance = hexDistance(observer.hex, target);
   if (distance > range) return false;
   if (distance <= 1) return true;
-  const elevation = here?.elevation ?? 0;
+  // Een vliegende eenheid (altitude) kijkt van hoger dan het terrein waar ze boven hangt.
+  const elevation = Math.max(here?.elevation ?? 0, type.altitude ?? 0);
   const line = hexLine(observer.hex, target);
   for (const hex of line.slice(1, -1)) {
     const terrain = terrainAt(state.map, state.catalog, hex);

@@ -6,13 +6,15 @@
 //
 // Uitleg van de velden staat bij `UnitType` in ../types.ts. Kort:
 //   movement      bewegingspunten per beurt (terrein kost punten, zie terrains.ts)
-//   movementClass 'foot' (te voet), 'tracked' (rupsvoertuig) of 'wheeled' (wielvoertuig)
+//   movementClass 'foot' (te voet), 'tracked' (rupsvoertuig), 'wheeled' (wielvoertuig) of 'air' (vliegend)
 //   attack        aanvalswaarde bij volle sterkte (0 = valt niet aan)
 //   defense       verdedigingswaarde bij volle sterkte
 //   maxStrength   sterktepunten bij volle bezetting
 //   vision        zichtafstand in hexen
 //   fireRange     bereik van indirect vuur (0 = geen); firepower = kracht van dat vuur
 //   supplyRange   eigen eenheden binnen dit bereik herstellen elke beurt (0 = geen)
+//   altitude      (optioneel) kijkhoogte: 2 = vliegend, kijkt over bos, stad en heuvels heen
+//   holdsObjectives (optioneel) false = kan geen doel innemen of bezet houden
 //   icon          het symbool: vormen in een kader van 100 breed en 60 hoog
 //
 // Alles is fictief en vereenvoudigd; de getallen zijn spelwaarden, geen echte specificaties.
@@ -110,5 +112,36 @@ export const UNIT_TYPES: UnitType[] = [
     supplyRange: 1,
     // Een horizontale streep onderin.
     icon: [{ kind: 'line', x1: 0, y1: 45, x2: 100, y2: 45 }],
+  },
+  {
+    id: 'drone',
+    name: 'Drone',
+    short: 'UAV',
+    description:
+      'Onbemand vliegtuigje. Vliegt over elk terrein (ook over de rivier) en kijkt over bos, stad en ' +
+      'heuvels heen. Kan niet aanvallen en geen doel bezet houden.',
+    movement: 8,
+    movementClass: 'air',
+    attack: 0,
+    defense: 1,
+    maxStrength: 4,
+    vision: 6,
+    fireRange: 0,
+    firepower: 0,
+    supplyRange: 0,
+    altitude: 2,
+    holdsObjectives: false,
+    // Een vliegtuigje: een gestrekte V (vleugels) met de letters UAV eronder.
+    icon: [
+      {
+        kind: 'polyline',
+        points: [
+          [20, 18],
+          [50, 32],
+          [80, 18],
+        ],
+      },
+      { kind: 'text', x: 50, y: 50, text: 'UAV', size: 14 },
+    ],
   },
 ];
